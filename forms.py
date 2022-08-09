@@ -24,8 +24,12 @@ class SignUpForm(FlaskForm):
                             validators=[InputRequired(), Length(min=1, max=30)])
 
 class LoginForm(FlaskForm):
+    """Form to log in"""
     username = StringField("Username:",
                             validators=[InputRequired(), Length(min=1, max=20)])
 
     password = PasswordField("Password:",
                             validators=[InputRequired(), Length(min=1)])
+
+class OnlyCSRFForm(FlaskForm):
+    """CSRF token for POST requests without forms"""
