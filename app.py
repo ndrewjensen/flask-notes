@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from models import User, db, connect_db
-from forms import SignUpForm
+from forms import SignUpForm, LoginForm
 
 app = Flask(__name__)
 
@@ -45,10 +45,37 @@ def show_user_signup():
 
     return render_template("signup.html", form = form)
 
-# @app.post('/register')
-# @app.get('/login')
-# @app.post('/login')
-# @app.get('/secret')
+
+@app.route('/login', methods = ['GET','POST'])
+def display_login_form():    
+    """Show a form that when submitted will login a user. Form accepts 
+    a username and a password."""
+
+    form = LoginForm()
+
+    if not form.validate_on_submit():
+        return render_template("login.html", form = form)
+
+    username = form.username.data
+    password = form.password.data
+
+    user = User().authenticate(username,
+                                password)
+
+    if not user: 
+        flash("Incorrect username and/or password")    
+        return render_template("login.html", form = form)
+
+    flash(f"{username} successfully logged in.")
+
+    return redirect('/secret')
+
+
+@app.get('/secret')
+def display_secret_page():
+    "render secret page to logged in users"
+
+    return render_template('secret.html')
 
 
 
