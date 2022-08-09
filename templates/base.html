@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet"
   href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
-  <title>{% block Title %}{% endblock %}</title>
+  <title>{% block title %}{% endblock %}</title>
 </head>
 
 
@@ -14,7 +14,7 @@
 <body class="container my-3">
 
   {% for msg in get_flashed_messages() %}
-
+    <p class="text-danger">{{ msg }}</p>
   {% endfor %}
 
   {% block content %}{% endblock %}

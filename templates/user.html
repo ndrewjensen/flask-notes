@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} {{user.username}} details {% endblock %}
+
+{% block content %}
+
+<h1>User Details</h1>
+
+<div>Username: {{ user.username }}</div>
+
+<div>Email: {{ user.email }}</div>
+
+<div>First: {{ user.first_name }}</div>
+
+<div>Last: {{ user.last_name }}</div>
+
+<form action="/logout" method="POST">
+  {{ form.hidden_tag() }}
+  <!--add type=hidden form fields -->
+  <button class="btn btn-warning">Log Out</button>
+</form>
+{% endblock %}
