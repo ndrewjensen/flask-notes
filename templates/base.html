@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet"
-  href="https://unpkg.com/bootstrap/dist/css/bootstrap.css"> 
+  href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
   <title>{% block Title %}{% endblock %}</title>
 </head>
 
@@ -14,10 +14,10 @@
 <body>
 
   {% for msg in get_flashed_messages() %}
-  
+
   {% endfor %}
 
-  {% block Content %}{% endblock %}
+  {% block content %}{% endblock %}
 
 </body>
 </html>
