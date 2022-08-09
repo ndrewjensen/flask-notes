@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-from models import User, db, connect_db
-from forms import SignUpForm, LoginForm, OnlyCSRFForm
+from models import User, db, connect_db, Note
+from forms import SignUpForm, LoginForm, OnlyCSRFForm, NoteForm
 
 app = Flask(__name__)
 
@@ -86,8 +86,7 @@ def display_user_details(username):
         return redirect('/login')
 
     user = User.query.get_or_404(username)
-
-    form = OnlyCSRFForm()
+    form = OnlyCSRFForm() #QUESTION:do we need both here and above?
 
     return render_template('user.html', user = user, form = form)
 
@@ -95,7 +94,7 @@ def display_user_details(username):
 def log_out_user():
     """Log out user in session"""
 
-    form = OnlyCSRFForm() #do we need both here and above?
+    form = OnlyCSRFForm() #QUESTION:do we need both here and above?
 
     if form.validate_on_submit():
         flash("Successfully logged out!")
@@ -107,5 +106,31 @@ def log_out_user():
 
 
 
+###############################################################################
+# Notes Routes
+
+@app.route('/users/<username>/notes/add', methods=["GET","POST"])
+def display_note_form_or_add_note(username):
+    """GET: Display a form to add notes.
+       POST: Add a new note and redirect to /users/<username>"""
+
+    if "username" not in session or session["username"] != username:
+        flash("You Shall Not Pass")
+        return redirect('/login')
 
 
+    form = NoteForm()
+
+    if not form.validate_on_submit():
+        return render_template("newnote.html", form = form)
+
+    title = form.title.data
+    content = form.content.data
+
+    note = Note(title=title, content=content, owner=username)
+    db.session.add(note)
+    db.session.commit()
+
+    flash(f"{note.title} successfully created.")
+
+    return redirect(f'/users/{username}')

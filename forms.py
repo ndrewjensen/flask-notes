@@ -1,10 +1,14 @@
 from click import password_option
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, TextAreaField
 from wtforms.validators import InputRequired, Length, Email
 
+class OnlyCSRFForm(FlaskForm):
+    """CSRF token for POST requests without forms"""
 
 
+################################################################################
+#USER FORMS
 class SignUpForm(FlaskForm):
     """Form for a user to sign up"""
 
@@ -31,5 +35,16 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password:",
                             validators=[InputRequired(), Length(min=1)])
 
-class OnlyCSRFForm(FlaskForm):
-    """CSRF token for POST requests without forms"""
+
+################################################################################
+# NOTES FORMS
+
+class NoteForm (FlaskForm):
+    """Form to add/edit a note"""
+
+    title = StringField("Title",
+                        validators=[InputRequired(), Length(min=1, max=100)])
+    content = TextAreaField("Content",
+                        validators=[InputRequired(), Length(min=1)])
+
+
