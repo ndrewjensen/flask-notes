@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %} New Note {% endblock %}
+{% block title %} Update Note {% endblock %}
 
 {% block content %}
-<form id="add-note-form" method="POST">
+<form id="update-note-form" method="POST">
   {{ form.hidden_tag() }}
   <!--add type=hidden form fields -->
 
@@ -21,6 +21,6 @@
 
   {% endfor %}
 
-  <button class="btn btn-primary" type="submit">Add Note</button>
+  <button class="btn btn-primary" type="submit">Update Note</button>
 </form>
 {% endblock %}

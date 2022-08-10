@@ -5,7 +5,10 @@
 {% block content %}
 
 <h1>User Details</h1>
-
+<form action="/users/{{user.username}}/delete" method="post">
+  {{ form.hidden_tag() }}
+  <button class="btn btn-sm btn-danger">Delete User</button>
+  </form>
 <div>Username: {{ user.username }}</div>
 
 <div>Email: {{ user.email }}</div>
@@ -22,6 +25,11 @@
           {{ note.title }} :
         </a>
           <p>{{ note.content }}</p>
+          <form action="/notes/{{note.id}}/delete" method="post">
+            {{ form.hidden_tag() }}
+            <button class="btn btn-outline-danger">Delete</button>
+
+          </form>
       </li>
     {% endfor %}
   </ul>

@@ -105,6 +105,32 @@ def log_out_user():
 
     return redirect(f"/users/{session['username']}")
 
+@app.post('/users/<username>/delete')
+def delete_user(username):
+    """delete all of a users posts and delete the user"""
+
+    if "username" not in session or session["username"] != username:
+        flash("You Shall Not Pass")
+        return redirect('/login')
+
+    user = User.query.get_or_404(username)
+    notes = user.notes
+    form = OnlyCSRFForm() 
+
+
+    if form.validate_on_submit():
+        flash("User Deleted!")
+        for note in notes:
+            db.session.delete(note) 
+        db.session.commit()
+        db.session.delete(user)
+        db.session.commit()
+        session.pop("username", None)
+    
+    return redirect("/")
+
+
+
 
 
 ###############################################################################
@@ -141,7 +167,6 @@ def edit_note(note_id):
     """Edit a note"""
 
     note = Note.query.get_or_404(note_id)
-
     user = note.user
 
     if "username" not in session or session["username"] != user.username:
@@ -151,7 +176,7 @@ def edit_note(note_id):
     form = NoteForm(obj=note)
 
     if not form.validate_on_submit():
-        return render_template("newnote.html", form = form)
+        return render_template("updatenote.html", form = form)
 
     note.title = form.title.data
     note.content = form.content.data
@@ -161,3 +186,24 @@ def edit_note(note_id):
     flash(f"{note.title} successfully edited.")
 
     return redirect(f'/users/{user.username}')
+
+@app.post('/notes/<int:note_id>/delete')
+def delete_note(note_id):
+    """delete a note"""
+
+    note = Note.query.get_or_404(note_id)
+    user = note.user
+    form = OnlyCSRFForm() 
+
+    if "username" not in session or session["username"] != user.username:
+        flash("You Shall Not Pass")
+        return redirect('/login')
+
+    if form.validate_on_submit():
+        flash("Note Deleted!")
+        db.session.delete(note)
+        db.session.commit()
+    
+    return redirect(f"/users/{session['username']}")
+
+    
