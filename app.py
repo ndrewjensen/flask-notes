@@ -135,3 +135,29 @@ def display_note_form_or_add_note(username):
     flash(f"{note.title} successfully created.")
 
     return redirect(f'/users/{username}')
+
+@app.route('/notes/<int:note_id>/update', methods=["GET","POST"])
+def edit_note(note_id):
+    """Edit a note"""
+
+    note = Note.query.get_or_404(note_id)
+
+    user = note.user
+
+    if "username" not in session or session["username"] != user.username:
+        flash("You Shall Not Pass")
+        return redirect('/login')
+
+    form = NoteForm(obj=note)
+
+    if not form.validate_on_submit():
+        return render_template("newnote.html", form = form)
+
+    note.title = form.title.data
+    note.content = form.content.data
+
+    db.session.commit()
+
+    flash(f"{note.title} successfully edited.")
+
+    return redirect(f'/users/{user.username}')
