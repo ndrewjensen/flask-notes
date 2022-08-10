@@ -87,8 +87,9 @@ def display_user_details(username):
 
     user = User.query.get_or_404(username)
     form = OnlyCSRFForm() #QUESTION:do we need both here and above?
+    notes = user.notes
 
-    return render_template('user.html', user = user, form = form)
+    return render_template('user.html', user = user, form = form, notes = notes)
 
 @app.post('/logout')
 def log_out_user():

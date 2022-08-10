@@ -14,9 +14,27 @@
 
 <div>Last: {{ user.last_name }}</div>
 
-<form action="/logout" method="POST">
+<div>
+  <ul class="list-group">
+    {% for note in notes %}
+      <li class="list-group-item">
+        <a href="/notes/{{ note.id }}/update">
+          {{ note.title }} :
+        </a>
+          <p>{{ note.content }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<form class="my-3">
   {{ form.hidden_tag() }}
   <!--add type=hidden form fields -->
-  <button class="btn btn-warning">Log Out</button>
+  <button formaction="/users/{{ user.username }}/notes/add" formmethod="GET" class="btn btn-primary">
+    Add Note
+  </button>
+  <button formaction="/logout" formmethod="POST" class="btn btn-warning">
+    Log Out
+  </button>
 </form>
 {% endblock %}
