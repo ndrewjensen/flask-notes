@@ -121,7 +121,7 @@ def delete_user(username):
     if form.validate_on_submit():
         flash("User Deleted!")
         for note in notes:
-            db.session.delete(note) 
+            db.session.delete(note) #QUESTION: there is an SQLalchemy method for this right?
         db.session.commit()
         db.session.delete(user)
         db.session.commit()
